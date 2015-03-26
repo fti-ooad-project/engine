@@ -1,0 +1,3 @@
+[submodule "submodules/quadtree"]
+	path = submodules/quadtree
+	url = https://github.com/fti-ooad-project/quadtree.git
