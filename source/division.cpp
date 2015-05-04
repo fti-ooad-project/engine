@@ -11,6 +11,8 @@
 
 #include <media/media.h>
 
+static unsigned int id_count = 0;
+
 Division::iterator::iterator(std::list<Member*>::iterator i) :
 	iter(i)
 {
@@ -35,6 +37,11 @@ Unit *Division::iterator::operator->()
 void Division::iterator::operator ++()
 {
 	++iter;
+}
+
+bool Division::iterator::operator !=(const iterator &i)
+{
+	return i.iter != iter;
 }
 
 Division::const_iterator::const_iterator(std::list<Member*>::const_iterator i) :
@@ -63,7 +70,13 @@ void Division::const_iterator::operator ++()
 	++iter;
 }
 
+bool Division::const_iterator::operator !=(const const_iterator &i)
+{
+	return i.iter != iter;
+}
+
 Division::Division()
+  : id(++id_count)
 {
 	
 }
@@ -110,6 +123,26 @@ Division::const_iterator Division::cbegin() const
 Division::const_iterator Division::cend() const
 {
 	return const_iterator(members.cend());
+}
+
+unsigned int Division::getID() const
+{
+	return id;
+}
+
+int Division::getNumber() const
+{
+	return members.size();
+}
+
+void Division::setMode(unsigned int m)
+{
+	mode = m;
+}
+
+unsigned int Division::getMode() const
+{
+	return mode;
 }
 
 vec2 Division::getRelPos(int row, int col) const

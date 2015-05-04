@@ -9,10 +9,13 @@ private:
 	vec2 pos = nullvec2;
 	vec2 vel = nullvec2;
 	double size = 1.0;
+	unsigned int id;
 	
 public:
 	Object();
 	virtual ~Object();
+	
+	unsigned int getID() const;
 	
 	double getInvMass() const;
 	void setInvMass(double im);

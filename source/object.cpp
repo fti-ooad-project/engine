@@ -1,6 +1,9 @@
 #include "object.hpp"
 
+static unsigned int id_counter = 0;
+
 Object::Object()
+  : id(++id_counter)
 {
 	
 }
@@ -8,6 +11,11 @@ Object::Object()
 Object::~Object()
 {
 	
+}
+
+unsigned int Object::getID() const
+{
+	return id;
 }
 
 double Object::getInvMass() const

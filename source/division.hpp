@@ -29,6 +29,7 @@ public:
 		Unit *operator *();
 		Unit *operator->();
 		void operator ++();
+		bool operator !=(const iterator &i);
 	};
 	
 	class const_iterator
@@ -41,6 +42,7 @@ public:
 		const Unit *operator *();
 		const Unit *operator->();
 		void operator++();
+		bool operator !=(const const_iterator &i);
 	};
 	
 private:
@@ -71,6 +73,9 @@ private:
 		MemberDist *m = nullptr;
 	};
 	
+	unsigned int id;
+	unsigned int mode = 0;
+	
 public:
 	Division();
 	virtual ~Division();
@@ -83,6 +88,12 @@ public:
 	
 	const_iterator cbegin() const;
 	const_iterator cend() const;
+	
+	unsigned int getID() const;
+	int getNumber() const;
+	
+	void setMode(unsigned int m);
+	unsigned int getMode() const;
 	
 	void updatePositions();
 	void movePositions(const vec2 &dp);
