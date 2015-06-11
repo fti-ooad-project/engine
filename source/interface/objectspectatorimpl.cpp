@@ -25,5 +25,5 @@ double ObjectSpectatorImpl::getSize() const
 }
 ObjectType ObjectSpectatorImpl::getObjectType() const
 {
-	return 0;
+	return object->getType();
 }

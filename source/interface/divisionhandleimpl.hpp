@@ -19,6 +19,7 @@ public:
 	virtual void setPosition(const vec2 &pos) override;
 	virtual void setDirection(const vec2 &dir) override;
 	virtual void setDestination(const vec2 &dst) override;
+	virtual void setDistance(double dist) override;
 	
 	virtual void setWidth(int width) override;
 	virtual void setMode(DivisionMode mode) override;
@@ -34,6 +35,7 @@ public:
 	virtual vec2 getPosition() const override;
 	virtual vec2 getDirection() const override;
 	virtual vec2 getDestination() const override;
+	virtual double getDistance() const override;
 	
 	virtual int getWidth() const override;
 	virtual DivisionMode getMode() const override;

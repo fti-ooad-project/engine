@@ -1,6 +1,7 @@
 #include "unit.hpp"
 
-Unit::Unit()
+Unit::Unit(unsigned int t)
+  : Object(t)
 {
     
 }

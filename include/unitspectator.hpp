@@ -5,7 +5,11 @@
 #include "objectspectator.hpp"
 
 typedef ObjectID UnitID;
-typedef int UnitType;
+
+typedef ObjectType UnitType;
+static const UnitType
+  UNIT_SWORDSMAN = 0x0101,
+	UNIT_ARCHER    = 0x0102;
 
 class UnitSpectator : public ObjectSpectator
 {

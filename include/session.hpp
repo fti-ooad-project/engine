@@ -28,4 +28,8 @@ public:
 	int getPlayersCount() const;
 	
 	Spectator *getSpectator();
+	
+	void process(double dt);
+	
+	bool loadMap();
 };

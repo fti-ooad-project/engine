@@ -5,17 +5,20 @@
 class Object
 {
 private:
-	double inv_mass = 0.0;
+	double inv_mass = 1.0/80.0;
 	vec2 pos = nullvec2;
 	vec2 vel = nullvec2;
-	double size = 1.0;
+	double size = 0.25;
 	unsigned int id;
+	unsigned int type;
 	
 public:
-	Object();
+	Object(unsigned int t = 0x0001);
 	virtual ~Object();
 	
 	unsigned int getID() const;
+	
+	unsigned int getType() const;
 	
 	double getInvMass() const;
 	void setInvMass(double im);

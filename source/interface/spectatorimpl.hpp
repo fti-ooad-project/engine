@@ -3,14 +3,17 @@
 #include "objectspectatorimpl.hpp"
 #include "../storage.hpp"
 #include <engine/spectator.hpp>
+#include <engine/playerspectator.hpp>
 
 class SpectatorImpl : public Spectator
 {
 private:
 	Storage *storage;
+	PlayerSpectator **players;
+	int players_count;
 	
 public:
-	SpectatorImpl(Storage *s);
+	SpectatorImpl(Storage *s, PlayerSpectator **ps, int pc);
 	virtual ~SpectatorImpl();
 	
 	virtual void forEachObjectSpectator(std::function<void(ObjectSpectator*)>) override;

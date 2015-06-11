@@ -2,8 +2,8 @@
 
 static unsigned int id_counter = 0;
 
-Object::Object()
-  : id(++id_counter)
+Object::Object(unsigned int t)
+  : id(++id_counter), type(t)
 {
 	
 }
@@ -16,6 +16,11 @@ Object::~Object()
 unsigned int Object::getID() const
 {
 	return id;
+}
+
+unsigned int Object::getType() const
+{
+	return type;
 }
 
 double Object::getInvMass() const

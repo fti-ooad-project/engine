@@ -7,14 +7,14 @@
 class Unit : public Object
 {
 private:
-	vec2 dir;
-	vec2 dst;
+	vec2 dir = vec2(0,1);
+	vec2 dst = nullvec2;
 	
-	double spd;
-	bool alive;
+	double spd = 1.0;
+	bool alive = true;
 
 public:
-	Unit();
+	Unit(unsigned int t = 0x0101);
 	virtual ~Unit();
 	
 	vec2 getDir() const;

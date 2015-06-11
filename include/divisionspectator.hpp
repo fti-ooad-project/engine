@@ -28,6 +28,7 @@ public:
 	virtual vec2 getPosition() const = 0;
 	virtual vec2 getDirection() const = 0;
 	virtual vec2 getDestination() const = 0;
+	virtual double getDistance() const = 0;
 	
 	virtual int getWidth() const = 0;
 	virtual DivisionMode getMode() const = 0;

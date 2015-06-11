@@ -48,14 +48,19 @@ DivisionID PlayerHandleImpl::mergeDivisions(DivisionID one, DivisionID two)
 	// ???
 	return 0;
 }
-DivisionID PlayerHandleImpl::purchaseDivision(UnitType, int unit_count)
+DivisionID PlayerHandleImpl::purchaseDivision(UnitType type, int unit_count)
 {
 	// TODO: move this to storage methods
 	Division *d = new Division;
 	for(int i = 0; i < unit_count; ++i)
 	{
-		d->addUnit(new Unit);
+		Unit *u = new Unit(type);
+		d->addUnit(u);
+		storage->addUnit(u);
+		storage->addObject(u);
 	}
+	d->redistribute();
+	d->updatePositions();
 	storage->addDivision(d);
 	return d->getID();
 }
@@ -67,7 +72,7 @@ bool PlayerHandleImpl::removeDivision(DivisionID id)
 	{
 		if(id == d->getID())
 		{
-			
+			victim = d;
 		}
 	});
 	if(victim == nullptr)

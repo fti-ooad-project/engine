@@ -52,7 +52,7 @@ private:
 	int width = 8;
 	double distance = 1.0;
 	
-	double speed = 1.0;
+	double speed = 0.5;
 	vec2 destination = nullvec2;
 	
 	std::list<Member*> members;

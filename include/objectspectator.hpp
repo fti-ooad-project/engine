@@ -3,7 +3,10 @@
 #include <4u/la/vec.hpp>
 
 typedef unsigned int ObjectID;
-typedef int ObjectType;
+
+typedef unsigned int ObjectType;
+static const ObjectType
+	OBJECT_STONE = 0x0001;
 
 class ObjectSpectator
 {

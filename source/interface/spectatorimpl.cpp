@@ -1,7 +1,7 @@
 #include "spectatorimpl.hpp"
 
-SpectatorImpl::SpectatorImpl(Storage *s)
-  : storage(s)
+SpectatorImpl::SpectatorImpl(Storage *s, PlayerSpectator **ps, int pc)
+  : storage(s), players(ps), players_count(pc)
 {
 	
 }
@@ -37,14 +37,16 @@ bool SpectatorImpl::forObjectSpectatorID(ObjectID id, std::function<void(ObjectS
 
 PlayerSpectator *SpectatorImpl::getPlayerSpectator(int num)
 {
-	// TODO: Access to PlayerHandle list
-	return nullptr;
+	if(num < 0 || num >= players_count)
+	{
+		return nullptr;
+	}
+	return players[num];
 }
 
 int SpectatorImpl::getPlayersCount() const
 {
-	// TODO: Access to PlayerHandle list
-	return 1;
+	return players_count;
 }
 
 void SpectatorImpl::setCallbackOnObjectCreate(std::function<void(ObjectSpectator*)>)
