@@ -1,5 +1,7 @@
 #include "playerhandleimpl.hpp"
 
+#include <cmath>
+
 PlayerHandleImpl::PlayerHandleImpl(Storage *s)
   : storage(s)
 {
@@ -52,9 +54,11 @@ DivisionID PlayerHandleImpl::purchaseDivision(UnitType type, int unit_count)
 {
 	// TODO: move this to storage methods
 	Division *d = new Division;
+	int width = int(sqrt(unit_count)) + 1;
 	for(int i = 0; i < unit_count; ++i)
 	{
 		Unit *u = new Unit(type);
+		u->setPos(0.6*(vec2(i/width,i%width) - 0.5*width*vec2(1,1)));
 		d->addUnit(u);
 		storage->addUnit(u);
 		storage->addObject(u);
