@@ -59,6 +59,35 @@ void Storage::forObjectsConst(std::function<void(const Object*)> func) const
 	}
 }
 
+Object *Storage::getObject(unsigned id)
+{
+	for(Object *o : objects)
+	{
+		if(o->getID() == id)
+		{
+			return o;
+		}
+	}
+	return nullptr;
+}
+
+const Object *Storage::getObjectConst(unsigned id) const
+{
+	for(const Object *o : objects)
+	{
+		if(o->getID() == id)
+		{
+			return o;
+		}
+	}
+	return nullptr;
+}
+
+int Storage::getObjectCount() const
+{
+	return objects.size();
+}
+
 void Storage::forUnits(std::function<void(Unit*)> func)
 {
 	for(Unit *u : units)
@@ -75,6 +104,35 @@ void Storage::forUnitsConst(std::function<void(const Unit*)> func) const
 	}
 }
 
+Unit *Storage::getUnit(unsigned id)
+{
+	for(Unit *u : units)
+	{
+		if(u->getID() == id)
+		{
+			return u;
+		}
+	}
+	return nullptr;
+}
+
+const Unit *Storage::getUnitConst(unsigned id) const
+{
+	for(const Unit *u : units)
+	{
+		if(u->getID() == id)
+		{
+			return u;
+		}
+	}
+	return nullptr;
+}
+
+int Storage::getUnitCount() const
+{
+	return units.size();
+}
+
 void Storage::forDivisions(std::function<void(Division*)> func)
 {
 	for(Division *d : divisions)
@@ -89,6 +147,35 @@ void Storage::forDivisionsConst(std::function<void(const Division*)> func) const
 	{
 		func(cd);
 	}
+}
+
+Division *Storage::getDivision(unsigned id)
+{
+	for(Division *d : divisions)
+	{
+		if(d->getID() == id)
+		{
+			return d;
+		}
+	}
+	return nullptr;
+}
+
+const Division *Storage::getDivisionConst(unsigned id) const
+{
+	for(const Division *d : divisions)
+	{
+		if(d->getID() == id)
+		{
+			return d;
+		}
+	}
+	return nullptr;
+}
+
+int Storage::getDivisionCount() const
+{
+	return divisions.size();
 }
 
 void Storage::updateTreeObject(const TreeKey &old_key, const TreeKey &new_key, Object *o)

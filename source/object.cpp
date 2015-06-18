@@ -8,6 +8,12 @@ Object::Object(unsigned int t)
 	
 }
 
+Object::Object(unsigned int _id, unsigned int t)
+  : id(_id), type(t)
+{
+	++id_counter;
+}
+
 Object::~Object()
 {
 	

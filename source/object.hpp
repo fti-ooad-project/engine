@@ -14,6 +14,7 @@ private:
 	
 public:
 	Object(unsigned int t = 0x0001);
+	Object(unsigned int _id, unsigned int t);
 	virtual ~Object();
 	
 	unsigned int getID() const;

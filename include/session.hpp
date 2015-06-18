@@ -1,35 +1,24 @@
 #pragma once
 
+#include <string>
+
 #include "spectator.hpp"
 #include "playerhandle.hpp"
 
-#ifndef StorageWrapper
-#define StorageWrapper void
-#endif
-
-#ifndef ProcessorWrapper
-#define ProcessorWrapper void
-#endif
+enum SessionState
+{
+	DISABLE = 0,
+	ENABLE
+};
 
 class Session
 {
-private:
-	StorageWrapper *storage = nullptr;
-	ProcessorWrapper *processor = nullptr;
-	PlayerHandle **players = nullptr;
-	Spectator *spectator = nullptr;
-	const int players_count;
-	
 public:
-	Session(int c_players_count);
-	~Session();
+	virtual ~Session() {}
 	
-	PlayerHandle *getPlayerHandle(int num);
-	int getPlayersCount() const;
+	virtual PlayerHandle *getPlayerHandle(int num) = 0;
+	virtual int getPlayersCount() const = 0;
 	
-	Spectator *getSpectator();
-	
-	void process(double dt);
-	
-	bool loadMap();
+	virtual Spectator *getSpectator() = 0;
+	virtual SessionState getState() const = 0;
 };

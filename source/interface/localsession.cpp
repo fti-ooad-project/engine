@@ -1,17 +1,21 @@
 #include "../processor.hpp"
 #include "../storage.hpp"
+#include "../tcp/server.hpp"
+
+#include <media/log.h>
 
 #define ProcessorWrapper Processor
 #define StorageWrapper Storage
+#define TCPServerWrapper TCPServer
 
-#include <engine/session.hpp>
+#include <engine/localsession.hpp>
 
 #include "spectatorimpl.hpp"
 #include "playerhandleimpl.hpp"
 
-#include <view.hpp>
+#include "../serverstream.hpp"
 
-Session::Session(int c_players_count)
+LocalSession::LocalSession(int c_players_count, int port)
   : players_count(c_players_count)
 {
 	storage = new Storage;
@@ -23,10 +27,32 @@ Session::Session(int c_players_count)
 		players[i] = new PlayerHandleImpl(storage);
 	}
 	spectator = new SpectatorImpl(storage,reinterpret_cast<PlayerSpectator**>(players),players_count);
+	
+	state = SessionState::ENABLE;
+	
+	auto handler = [this](TCPConnection *conn)
+	{
+		ServerStream(this,storage)(conn);
+	};
+	auto error_handler = [](const std::string &msg)
+	{
+		printWarn("LocalSession: %s\n",msg.data());
+	};
+	try
+	{
+		server = new TCPServer(port,handler,error_handler);
+	}
+	catch(TCPException e)
+	{
+		printWarn("LocalSession: %s\n",e.getMessage().data());
+	}
 }
 
-Session::~Session()
+LocalSession::~LocalSession()
 {
+	state = SessionState::DISABLE;
+	delete server;
+	
 	delete spectator;
 	for(int i = 0; i < players_count; ++i)
 	{
@@ -37,7 +63,7 @@ Session::~Session()
 	delete storage;
 }
 
-PlayerHandle *Session::getPlayerHandle(int num)
+PlayerHandle *LocalSession::getPlayerHandle(int num)
 {
 	if(num >= 0 && num < players_count)
 	{
@@ -46,17 +72,22 @@ PlayerHandle *Session::getPlayerHandle(int num)
 	return nullptr;
 }
 
-int Session::getPlayersCount() const
+int LocalSession::getPlayersCount() const
 {
 	return players_count;
 }
 
-Spectator *Session::getSpectator()
+Spectator *LocalSession::getSpectator()
 {
 	return spectator;
 }
 
-void Session::process(double dt)
+SessionState LocalSession::getState() const
+{
+	return state;
+}
+
+void LocalSession::process(double dt)
 {
 	int iter = 0x1;
 	for(int i = 0; i < iter; ++i)
@@ -67,7 +98,7 @@ void Session::process(double dt)
 	}
 }
 
-bool Session::loadMap()
+void LocalSession::loadMap()
 {
 	for(int i = 0; i < 0xa; ++i)
 	{
@@ -77,5 +108,5 @@ bool Session::loadMap()
 		o->setPos(5.0*vec2(i%5 - 2,i/5));
 		storage->addObject(o);
 	}
-	return true;
 }
+

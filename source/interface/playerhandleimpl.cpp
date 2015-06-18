@@ -18,6 +18,7 @@ int PlayerHandleImpl::getMoneyAmount() const
 {
 	return money;
 }
+
 void PlayerHandleImpl::forEachDivisionHandle(std::function<void(DivisionHandle *dh)> func)
 {
 	storage->forDivisions([func](Division *d)
@@ -26,6 +27,9 @@ void PlayerHandleImpl::forEachDivisionHandle(std::function<void(DivisionHandle *
 		func(&dh);
 	});
 }
+
+#include <media/log.h>
+
 bool PlayerHandleImpl::forDivisionHandleID(DivisionID id, std::function<void(DivisionHandle *dh)> func)
 {
 	bool done = false;
@@ -40,6 +44,7 @@ bool PlayerHandleImpl::forDivisionHandleID(DivisionID id, std::function<void(Div
 	});
 	return done;
 }
+
 std::pair<DivisionID,DivisionID> PlayerHandleImpl::splitDivision(DivisionID id, std::function<bool(UnitSpectator*)> ind)
 {
 	// ???
