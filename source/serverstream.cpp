@@ -31,16 +31,34 @@ void ServerStream::operator()(TCPConnection *conn)
 		printf("data was sent to %d\n",conn->get_fd());
 		try
 		{
-			conn->queue_write(int(storage->getObjectCount()));
+			/*
+			int unit_count = storage->getUnitCount();
+			conn->queue_write(unit_count);
+			flush();
+			storage->forUnitsConst([conn,flush](const Unit *u)
+			{
+				u->getDir();
+				u->getDst();
+			});
+			*/
+			
+			int object_count = storage->getObjectCount();
+			conn->queue_write(object_count);
 			flush();
 			storage->forObjectsConst([conn,flush](const Object *o)
 			{
-				conn->queue_write(ObjectID(o->getID()));
-				conn->queue_write(ObjectType(o->getType()));
-				conn->queue_write(double(o->getSize()));
-				conn->queue_write(double(o->getInvMass()));
-				conn->queue_write(vec2(o->getPos()));
-				conn->queue_write(vec2(o->getVel()));
+				ObjectID id = o->getID();
+				ObjectType type = o->getType();
+				double size = o->getSize();
+				double inv_mass = o->getInvMass();
+				vec2 pos = o->getPos();
+				vec2 vel = o->getVel();
+				conn->queue_write(id);
+				conn->queue_write(type);
+				conn->queue_write(size);
+				conn->queue_write(inv_mass);
+				conn->queue_write(pos);
+				conn->queue_write(vel);
 				flush();
 			});
 		}
