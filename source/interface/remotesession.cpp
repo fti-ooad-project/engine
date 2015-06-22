@@ -1,8 +1,6 @@
 #include "../storage.hpp"
 #include "../tcp/client.hpp"
 
-#include <media/log.h>
-
 #define StorageWrapper Storage
 #define TCPConnectionWrapper TCPConnection
 
@@ -11,6 +9,8 @@
 #include "spectatorimpl.hpp"
 
 #include "../clientstream.hpp"
+
+#include <stdio.h>
 
 RemoteSession::RemoteSession(const std::string &host, int port)
   : players_count(0)
@@ -28,7 +28,7 @@ RemoteSession::RemoteSession(const std::string &host, int port)
 	catch(TCPException e)
 	{
 		connection = nullptr;
-		printWarn("TCPException: %s\n",e.getMessage().data());
+		fprintf(stderr,"TCPException: %s\n",e.getMessage().data());
 	}
 	
 	thread = new std::thread([this]()
@@ -49,7 +49,7 @@ RemoteSession::~RemoteSession()
 	}
 	catch(TCPException e)
 	{
-		printWarn("TCPException: %s\n",e.getMessage().data());
+		fprintf(stderr,"TCPException: %s\n",e.getMessage().data());
 	}
 	
 	delete spectator;

@@ -2,8 +2,6 @@
 #include "../storage.hpp"
 #include "../tcp/server.hpp"
 
-#include <media/log.h>
-
 #define ProcessorWrapper Processor
 #define StorageWrapper Storage
 #define TCPServerWrapper TCPServer
@@ -14,6 +12,8 @@
 #include "playerhandleimpl.hpp"
 
 #include "../serverstream.hpp"
+
+#include <stdio.h>
 
 LocalSession::LocalSession(int c_players_count, int port)
   : players_count(c_players_count)
@@ -36,7 +36,7 @@ LocalSession::LocalSession(int c_players_count, int port)
 	};
 	auto error_handler = [](const std::string &msg)
 	{
-		printWarn("LocalSession: %s\n",msg.data());
+		fprintf(stderr,"LocalSession: %s\n",msg.data());
 	};
 	try
 	{
@@ -45,7 +45,7 @@ LocalSession::LocalSession(int c_players_count, int port)
 	catch(TCPException e)
 	{
 		server = nullptr;
-		printWarn("LocalSession: %s\n",e.getMessage().data());
+		fprintf(stderr,"LocalSession: %s\n",e.getMessage().data());
 	}
 }
 

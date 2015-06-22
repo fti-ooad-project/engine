@@ -28,8 +28,6 @@ void PlayerHandleImpl::forEachDivisionHandle(std::function<void(DivisionHandle *
 	});
 }
 
-#include <media/log.h>
-
 bool PlayerHandleImpl::forDivisionHandleID(DivisionID id, std::function<void(DivisionHandle *dh)> func)
 {
 	bool done = false;

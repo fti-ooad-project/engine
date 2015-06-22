@@ -9,8 +9,6 @@
 
 #include <4u/la/mat.hpp>
 
-#include <media/media.h>
-
 static const double 
   DELTA = 1e-1,
   DELTA2 = 1e-2;
