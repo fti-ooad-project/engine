@@ -13,6 +13,7 @@ class ObjectSpectator
 public:
 	virtual ObjectID getID() const = 0;
 	virtual vec2 getPosition() const = 0;
+	virtual vec2 getVelocity() const = 0;
 	virtual double getSize() const = 0;
 	virtual ObjectType getObjectType() const = 0;
 };

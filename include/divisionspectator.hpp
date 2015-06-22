@@ -7,12 +7,11 @@
 #include "unitspectator.hpp"
 
 typedef unsigned int DivisionID;
+typedef int DivisionMode;
 
-enum DivisionMode
-{
-	HOLD,
-	FREE
-};
+static const DivisionMode
+	MODE_HOLD = 0,
+	MODE_FREE = 1;
 
 class DivisionSpectator
 {

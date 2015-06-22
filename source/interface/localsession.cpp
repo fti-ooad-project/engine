@@ -44,6 +44,7 @@ LocalSession::LocalSession(int c_players_count, int port)
 	}
 	catch(TCPException e)
 	{
+		server = nullptr;
 		printWarn("LocalSession: %s\n",e.getMessage().data());
 	}
 }
@@ -51,7 +52,10 @@ LocalSession::LocalSession(int c_players_count, int port)
 LocalSession::~LocalSession()
 {
 	state = SessionState::DISABLE;
-	delete server;
+	if(server != nullptr)
+	{
+		delete server;
+	}
 	
 	delete spectator;
 	for(int i = 0; i < players_count; ++i)
@@ -100,12 +104,12 @@ void LocalSession::process(double dt)
 
 void LocalSession::loadMap()
 {
-	for(int i = 0; i < 0xa; ++i)
+	for(int i = 0; i < 0x8; ++i)
 	{
 		Object *o = new Object();
 		o->setInvMass(0.0001);
-		o->setSize(2.0);
-		o->setPos(5.0*vec2(i%5 - 2,i/5));
+		o->setSize(1.2);
+		o->setPos(10.0*vec2(i%4 - 1.5,i/4));
 		storage->addObject(o);
 	}
 }

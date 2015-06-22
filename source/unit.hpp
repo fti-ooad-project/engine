@@ -10,7 +10,7 @@ private:
 	vec2 dir = vec2(0,1);
 	vec2 dst = nullvec2;
 	
-	double spd = 1.0;
+	double spd = 2.4;
 	bool alive = true;
 
 public:

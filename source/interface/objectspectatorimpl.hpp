@@ -14,6 +14,7 @@ public:
 	
 	virtual ObjectID getID() const override;
 	virtual vec2 getPosition() const override;
+	virtual vec2 getVelocity() const override;
 	virtual double getSize() const override;
 	virtual ObjectType getObjectType() const override;
 };

@@ -52,7 +52,7 @@ private:
 	int width = 8;
 	double distance = 1.0;
 	
-	double speed = 0.5;
+	double speed = 0.8;
 	vec2 destination = nullvec2;
 	
 	std::list<Member*> members;
@@ -96,7 +96,7 @@ public:
 	unsigned int getMode() const;
 	
 	void updatePositions();
-	void movePositions(const vec2 &dp);
+	void movePositions(double dt);
 	void redistribute();
 	
 	void setPosition(const vec2 &p);

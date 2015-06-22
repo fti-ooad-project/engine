@@ -3,6 +3,8 @@
 #include <4u/la/vec.hpp>
 #include <4u/la/mat.hpp>
 
+#define USE_TREE
+
 static const double 
   DELTA = 1e-1,
   DELTA2 = 1e-2,
@@ -56,24 +58,19 @@ void Processor::move(double dt)
 	storage->forObjects([dt,this](Object *o)
 	{
 		vec2 pos = o->getPos() + dt*o->getVel();
+#ifdef USE_TREE
 		storage->updateTreeObject(
 		  TreeKey(o->getPos(),o->getSize()),
 		  TreeKey(pos,o->getSize()),
 		  o
 		);
+#endif
 		o->setPos(pos);
 	});
 	storage->forDivisions([dt](Division *d)
 	{
-		vec2 dist = d->getDestination() - d->getPosition();
-		if(dist*dist > DELTA2)
-		{
-			vec2 pos = d->getPosition();
-			vec2 dp = dt*norm(d->getDestination() - pos)*d->getSpeed();
-			d->setPosition(pos + dp);
-			d->movePositions(dp);
-			d->updatePositions();
-		}
+		d->movePositions(dt);
+		d->updatePositions();
 	});
 }
 
@@ -83,7 +80,11 @@ void Processor::interact()
 	{
 		storage->forObjects([this](Object *o0)
 		{
+#ifdef USE_TREE
 			storage->forNearObjects(o0,[this,o0](Object *o1)
+#else
+			storage->forObjects([this,o0](Object *o1)
+#endif
 			{
 				if(o0 < o1)
 				{
@@ -104,6 +105,8 @@ void Processor::interact()
 				}
 			});
 		});
+#ifdef USE_TREE
 		storage->updateTree();
+#endif
 	}
 }

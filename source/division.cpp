@@ -11,6 +11,10 @@
 
 #include <media/media.h>
 
+static const double 
+  DELTA = 1e-1,
+  DELTA2 = 1e-2;
+
 static unsigned int id_count = 0;
 
 Division::iterator::iterator(std::list<Member*>::iterator i) :
@@ -163,17 +167,43 @@ void Division::updatePositions()
 {
 	mat2 rot = mat2(direction.x(),-direction.y(),direction.y(),direction.x());
 	
+	vec2 dpos = destination;
+	if(mode == 0)
+	{
+		dpos = position;
+	}
+	
 	for(Member *m : members)
 	{
-		m->unit->setDst(position + rot*getRelPos(m->row,m->col));
+		m->unit->setDst(dpos + rot*getRelPos(m->row,m->col));
 	}
 }
 
-void Division::movePositions(const vec2 &dp)
+void Division::movePositions(double dt)
 {
-	for(Member *m : members)
+	if(mode == 0)
 	{
-		m->unit->setDst(m->unit->getDst() + dp);
+		vec2 dist = getDestination() - getPosition();
+		if(dist*dist > DELTA2)
+		{
+			vec2 pos = getPosition();
+			vec2 dp = dt*norm(getDestination() - pos)*getSpeed();
+			setPosition(pos + dp);
+			for(Member *m : members)
+			{
+				m->unit->setDst(m->unit->getDst() + dp);
+			}
+		}
+	}
+	else
+	{
+		vec2 avg_pos = nullvec2;
+		for(Member *m : members)
+		{
+			avg_pos += m->unit->getPos();
+		}
+		avg_pos /= members.size();
+		setPosition(avg_pos);
 	}
 }
 

@@ -29,6 +29,7 @@ void DivisionHandleImpl::setDirection(const vec2 &dir)
 void DivisionHandleImpl::setDestination(const vec2 &dst)
 {
 	division->setDestination(dst);
+	division->updatePositions();
 }
 
 void DivisionHandleImpl::setDistance(double dist)
@@ -113,9 +114,5 @@ int DivisionHandleImpl::getWidth() const
 
 DivisionMode DivisionHandleImpl::getMode() const
 {
-	if(division->getMode())
-	{
-		return DivisionMode::HOLD;
-	}
-	return DivisionMode::FREE;
+	return division->getMode();
 }

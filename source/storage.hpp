@@ -2,6 +2,8 @@
 
 #include <functional>
 #include <map>
+#include <mutex>
+
 #include "tree.hpp"
 
 #include "object.hpp"
@@ -11,10 +13,18 @@
 class Storage
 {
 private:
+	class recursive_mutex_placeholder
+	{
+	public:
+		void lock(){}
+		void unlock(){}
+	};
+	
 	Tree<Object*> tree;
 	std::list<Object*> objects;
 	std::list<Unit*> units;
 	std::list<Division*> divisions;
+	mutable /*std::*/recursive_mutex_placeholder rmutex;
 	
 public:
 	Storage();
