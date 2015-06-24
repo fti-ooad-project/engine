@@ -4,11 +4,16 @@
 
 #include "../division.hpp"
 
-class DivisionHandleImpl : public DivisionHandleBase
+#include "../tcp/connection.hpp"
+
+class DivisionHandleClient : public DivisionHandleBase
 {
+private:
+	TCPConnection *conn;
+	
 public:
-	DivisionHandleImpl(Division *d);
-	virtual ~DivisionHandleImpl();
+	DivisionHandleClient(Division *d, TCPConnection *c);
+	virtual ~DivisionHandleClient();
 	
 	// DivisionHandle methods
 	

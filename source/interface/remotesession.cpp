@@ -9,7 +9,7 @@
 #include <engine/remotesession.hpp>
 
 #include "spectatorimpl.hpp"
-#include "playerhandleimpl.hpp"
+#include "playerhandleclient.hpp"
 
 #include "../clientstream.hpp"
 
@@ -21,13 +21,6 @@ RemoteSession::RemoteSession(const std::string &host, int port)
 	processor = new Processor;
 	processor->setStorage(storage);
 	
-	players_count = 1;
-	players = new PlayerHandle*[players_count];
-	players[0] = new PlayerHandleImpl(storage);
-	spectator = new SpectatorImpl(storage,reinterpret_cast<PlayerSpectator**>(players),players_count);
-	
-	state = SessionState::ENABLE;
-	
 	try
 	{
 		connection = TCPClient::connect(host,port);
@@ -37,6 +30,13 @@ RemoteSession::RemoteSession(const std::string &host, int port)
 		connection = nullptr;
 		fprintf(stderr,"TCPException: %s\n",e.getMessage().data());
 	}
+	
+	players_count = 1;
+	players = new PlayerHandle*[players_count];
+	players[0] = new PlayerHandleClient(0,storage,connection);
+	spectator = new SpectatorImpl(storage,reinterpret_cast<PlayerSpectator**>(players),players_count);
+	
+	state = SessionState::ENABLE;
 	
 	thread = new std::thread([this]()
 	{

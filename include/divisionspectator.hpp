@@ -6,7 +6,7 @@
 
 #include "unitspectator.hpp"
 
-typedef unsigned int DivisionID;
+typedef int DivisionID;
 typedef int DivisionMode;
 
 static const DivisionMode

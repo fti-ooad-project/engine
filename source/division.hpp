@@ -73,8 +73,8 @@ private:
 		MemberDist *m = nullptr;
 	};
 	
-	unsigned int id;
-	unsigned int mode = 0;
+	int id;
+	int mode = 0;
 	
 public:
 	Division();

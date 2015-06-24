@@ -2,8 +2,8 @@
 
 #include <cmath>
 
-PlayerHandleImpl::PlayerHandleImpl(Storage *s)
-  : storage(s)
+PlayerHandleImpl::PlayerHandleImpl(int _id, Storage *s)
+  : PlayerHandleBase(_id,s)
 {
 	
 }
@@ -14,13 +14,9 @@ PlayerHandleImpl::~PlayerHandleImpl()
 }
 
 // PlayerHandle methods
-int PlayerHandleImpl::getMoneyAmount() const
-{
-	return money;
-}
-
 void PlayerHandleImpl::forEachDivisionHandle(std::function<void(DivisionHandle *dh)> func)
 {
+	Storage *storage = getStorage();
 	storage->forDivisions([func](Division *d)
 	{
 		DivisionHandleImpl dh(d);
@@ -30,6 +26,7 @@ void PlayerHandleImpl::forEachDivisionHandle(std::function<void(DivisionHandle *
 
 bool PlayerHandleImpl::forDivisionHandleID(DivisionID id, std::function<void(DivisionHandle *dh)> func)
 {
+	Storage *storage = getStorage();
 	bool done = false;
 	storage->forDivisions([id,func,&done](Division *d)
 	{
@@ -53,10 +50,15 @@ DivisionID PlayerHandleImpl::mergeDivisions(DivisionID one, DivisionID two)
 	// ???
 	return 0;
 }
-DivisionID PlayerHandleImpl::purchaseDivision(UnitType type, int unit_count)
+DivisionID PlayerHandleImpl::purchaseDivision(DivisionID did, UnitType type, int unit_count)
 {
+	Storage *storage = getStorage();
 	// TODO: move this to storage methods
-	Division *d = new Division;
+	Division *d = nullptr;
+	if(did > 0)
+		d = new Division(did);
+	else
+		d = new Division;
 	int width = int(sqrt(unit_count)) + 1;
 	for(int i = 0; i < unit_count; ++i)
 	{
@@ -73,6 +75,7 @@ DivisionID PlayerHandleImpl::purchaseDivision(UnitType type, int unit_count)
 }
 bool PlayerHandleImpl::removeDivision(DivisionID id)
 {
+	Storage *storage = getStorage();
 	// TODO: move this to storage methods
 	Division *victim = nullptr;
 	storage->forDivisions([id,&victim](Division *d)
@@ -93,39 +96,4 @@ bool PlayerHandleImpl::removeDivision(DivisionID id)
 	}
 	delete victim;
 	return true;
-}
-
-// PlayerSpectator methods
-void PlayerHandleImpl::forEachDivisionSpectator(std::function<void(DivisionSpectator*)> func)
-{
-	storage->forDivisions([func](Division *d)
-	{
-		DivisionHandleImpl dh(d);
-		func(static_cast<DivisionSpectator*>(&dh));
-	});
-}
-
-bool PlayerHandleImpl::forDivisionSpectatorID(DivisionID id, std::function<void(DivisionSpectator*)> func)
-{
-	bool done = false;
-	storage->forDivisions([id,func,&done](Division *d)
-	{
-		if(id == d->getID())
-		{
-			DivisionHandleImpl dh(d);
-			func(static_cast<DivisionSpectator*>(&dh));
-			done = true;
-		}
-	});
-	return done;
-}
-
-int PlayerHandleImpl::getDivisionCount() const
-{
-	int counter = 0;
-	storage->forDivisionsConst([&counter](const Division*)
-	{
-		++counter;
-	});
-	return counter;
 }

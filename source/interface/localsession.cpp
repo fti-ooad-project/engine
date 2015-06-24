@@ -24,7 +24,7 @@ LocalSession::LocalSession(int c_players_count, int port)
 	players = new PlayerHandle*[players_count];
 	for(int i = 0; i < players_count; ++i)
 	{
-		players[i] = new PlayerHandleImpl(storage);
+		players[i] = new PlayerHandleImpl(i,storage);
 	}
 	spectator = new SpectatorImpl(storage,reinterpret_cast<PlayerSpectator**>(players),players_count);
 	

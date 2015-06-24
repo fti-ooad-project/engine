@@ -9,13 +9,16 @@
 
 #include "divisionhandleimpl.hpp"
 
-class PlayerHandleImpl : public PlayerHandleBase
+#include "../tcp/connection.hpp"
+
+class PlayerHandleClient : public PlayerHandleBase
 {
 private:
+	TCPConnection *conn = nullptr;
 	
 public:
-	PlayerHandleImpl(int _id, Storage *s);
-	virtual ~PlayerHandleImpl();
+	PlayerHandleClient(int _id, Storage *s, TCPConnection *c);
+	virtual ~PlayerHandleClient();
 	
 	// PlayerHandle methods
 	virtual void forEachDivisionHandle(std::function<void(DivisionHandle *dh)> func) override;
@@ -23,6 +26,6 @@ public:
 	virtual std::pair<DivisionID,DivisionID> splitDivision(DivisionID id, std::function<bool(UnitSpectator*)> ind) override;
 	virtual DivisionID mergeDivisions(DivisionID one, DivisionID two) override;
 	/* Unavailable in battle mode */
-	virtual DivisionID purchaseDivision(DivisionID did, UnitType type, int unit_count) override;
+	virtual DivisionID purchaseDivision(DivisionID id, UnitType unit_type, int unit_count) override;
 	virtual bool removeDivision(DivisionID id) override;
 };

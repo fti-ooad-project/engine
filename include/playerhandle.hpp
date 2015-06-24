@@ -10,6 +10,8 @@ class PlayerHandle : public PlayerSpectator
 public:
 	virtual ~PlayerHandle() {}
 	
+	virtual int getID() const = 0;
+	
 	/* Money management */
 	virtual int getMoneyAmount() const = 0;
 	
@@ -20,5 +22,6 @@ public:
 	virtual DivisionID mergeDivisions(DivisionID one, DivisionID two) = 0;
 	/* Unavailable in battle mode */
 	virtual DivisionID purchaseDivision(UnitType unit_type, int unit_count) = 0;
+	virtual DivisionID purchaseDivision(DivisionID id, UnitType unit_type, int unit_count) = 0;
 	virtual bool removeDivision(DivisionID id) = 0;
 };

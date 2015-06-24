@@ -39,16 +39,29 @@ void ClientStream::operator()(TCPConnection *conn)
 			while(true)
 			{
 				DivisionID did;
+				vec2 dpos;
+				vec2 ddir;
+				double dist;
+				int width;
 				conn->queue_read(did);
 				flush();
 				if(did == 0)
 					break;
+				conn->queue_read(dpos);
+				conn->queue_read(ddir);
+				conn->queue_read(dist);
+				conn->queue_read(width);
+				flush();
 				Division *d = storage->getDivision(did);
 				if(d == nullptr)
 				{
 					d = new Division(did);
 					storage->addDivision(d);
 				}
+				d->setPosition(dpos);
+				d->setDirection(ddir);
+				d->setDistance(dist);
+				d->setWidth(width);
 				while(true)
 				{
 					UnitID id;
