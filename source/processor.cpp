@@ -27,6 +27,10 @@ void Processor::setStorage(Storage *s)
 
 void Processor::attract()
 {
+	storage->forObjects([](Object *o)
+	{
+		o->setVelBuf(nullvec2);
+	});
 	storage->forUnits([](Unit *u)
 	{
 		vec2 dist = u->getDst() - u->getPos();
@@ -35,20 +39,20 @@ void Processor::attract()
 		{
 			double len = sqrt(len2);
 			vec2 dir = dist/len;
-			u->setDir(dir);
-			vec2 vel = dir*u->getSpd();
-			
+			vec2 intension = dir*u->getSpd();
 			double msd = 0.5;
 			if(len < msd)
 			{
-				vel *= len/msd;
+				intension *= len/msd;
 			}
-			u->setVel(vel);
+			
+			u->setIntension(intension);
 		}
 		else
 		{
-			u->setVel(nullvec2);
+			u->setIntension(nullvec2);
 		}
+		u->setVelBuf(u->getIntension());
 	});
 }
 
@@ -57,7 +61,7 @@ void Processor::move(double dt)
 	// tree._print();
 	storage->forObjects([dt,this](Object *o)
 	{
-		vec2 pos = o->getPos() + dt*o->getVel();
+		vec2 pos = o->getPos() + dt*o->getVelBuf();
 #ifdef USE_TREE
 		storage->updateTreeObject(
 		  TreeKey(o->getPos(),o->getSize()),
@@ -74,7 +78,7 @@ void Processor::move(double dt)
 	});
 }
 
-void Processor::interact()
+void Processor::interact(double dt)
 {
 	for(int i = 0; i < 0x1; ++i)
 	{
@@ -109,4 +113,26 @@ void Processor::interact()
 		storage->updateTree();
 #endif
 	}
+	storage->forObjects([this,dt](Object *o)
+	{
+		if(dt > 1e-8)
+		{
+			o->setVel((o->getPos() - o->getOldPos())/dt);
+		}
+		o->updatePos();
+	});
+	storage->forUnits([this,dt](Unit *u)
+	{
+		vec2 vel = u->getVel();
+		double len2 = vel*vel;
+		if(len2 > DELTA2)
+		{
+			vec2 ndu = 0.2*vel + 0.8*u->getDir();
+			double nlen2 = ndu*ndu;
+			if(nlen2 > DELTA2)
+			{
+				u->setDir(ndu/sqrt(nlen2));
+			}
+		}
+	});
 }

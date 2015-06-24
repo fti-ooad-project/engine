@@ -31,20 +31,29 @@ void ServerStream::operator()(TCPConnection *conn)
 		printf("data was sent to %d\n",conn->get_fd());
 		try
 		{
-			/*
-			int unit_count = storage->getUnitCount();
-			conn->queue_write(unit_count);
-			flush();
-			storage->forUnitsConst([conn,flush](const Unit *u)
+			storage->forDivisionsConst([conn,flush](const Division *d)
 			{
-				u->getDir();
-				u->getDst();
+				DivisionID did = d->getID();
+				conn->queue_write(did);
+				flush();
+				for(const Unit *u : *d)
+				{
+					UnitID id = u->getID();
+					UnitType type = u->getType();
+					vec2 dir = u->getDir();
+					vec2 dst = u->getDst();
+					conn->queue_write(id);
+					conn->queue_write(type);
+					conn->queue_write(dir);
+					conn->queue_write(dst);
+					flush();
+				}
+				conn->queue_write(UnitID(0));
+				flush();
 			});
-			*/
-			
-			int object_count = storage->getObjectCount();
-			conn->queue_write(object_count);
+			conn->queue_write(DivisionID(0));
 			flush();
+			
 			storage->forObjectsConst([conn,flush](const Object *o)
 			{
 				ObjectID id = o->getID();
@@ -61,6 +70,8 @@ void ServerStream::operator()(TCPConnection *conn)
 				conn->queue_write(vel);
 				flush();
 			});
+			conn->queue_write(ObjectID(0));
+			flush();
 		}
 		catch(std::exception)
 		{

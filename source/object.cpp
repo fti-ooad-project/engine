@@ -39,6 +39,11 @@ void Object::setInvMass(double im)
 	inv_mass = im;
 }
 
+vec2 Object::getOldPos() const
+{
+	return old_pos;
+}
+
 vec2 Object::getPos() const
 {
     return pos;
@@ -59,6 +64,16 @@ void Object::setVel(const vec2 &v)
     vel = v;
 }
 
+vec2 Object::getVelBuf() const
+{
+    return velbuf;
+}
+
+void Object::setVelBuf(const vec2 &v)
+{
+    velbuf = v;
+}
+
 double Object::getSize() const
 {
 	return size;
@@ -67,4 +82,9 @@ double Object::getSize() const
 void Object::setSize(double s)
 {
 	size = s;
+}
+
+void Object::updatePos()
+{
+	old_pos = pos;
 }

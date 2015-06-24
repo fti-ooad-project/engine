@@ -1,23 +1,30 @@
+#include "../processor.hpp"
 #include "../storage.hpp"
 #include "../tcp/client.hpp"
 
+#define ProcessorWrapper Processor
 #define StorageWrapper Storage
 #define TCPConnectionWrapper TCPConnection
 
 #include <engine/remotesession.hpp>
 
 #include "spectatorimpl.hpp"
+#include "playerhandleimpl.hpp"
 
 #include "../clientstream.hpp"
 
 #include <stdio.h>
 
 RemoteSession::RemoteSession(const std::string &host, int port)
-  : players_count(0)
 {
 	storage = new Storage;
+	processor = new Processor;
+	processor->setStorage(storage);
 	
-	spectator = new SpectatorImpl(storage,nullptr,players_count);
+	players_count = 1;
+	players = new PlayerHandle*[players_count];
+	players[0] = new PlayerHandleImpl(storage);
+	spectator = new SpectatorImpl(storage,reinterpret_cast<PlayerSpectator**>(players),players_count);
 	
 	state = SessionState::ENABLE;
 	
@@ -52,8 +59,23 @@ RemoteSession::~RemoteSession()
 		fprintf(stderr,"TCPException: %s\n",e.getMessage().data());
 	}
 	
+	for(int i = 0; i < players_count; ++i)
+	{
+		delete players[i];
+	}
+	delete[] players;
+	
 	delete spectator;
 	delete storage;
+}
+
+void RemoteSession::process(double dt)
+{
+	int iter = 0x1;
+	for(int i = 0; i < iter; ++i)
+	{
+		processor->move(dt/iter);
+	}
 }
 
 PlayerHandle *RemoteSession::getPlayerHandle(int num)

@@ -15,5 +15,5 @@ public:
 	
 	void attract();
 	void move(double dt);
-	void interact();
+	void interact(double dt);
 };

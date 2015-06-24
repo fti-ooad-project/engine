@@ -98,7 +98,7 @@ void LocalSession::process(double dt)
 	{
 		processor->attract();
 		processor->move(dt/iter);
-		processor->interact();
+		processor->interact(dt/iter);
 	}
 }
 

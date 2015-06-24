@@ -6,6 +6,12 @@ Unit::Unit(unsigned int t)
     
 }
 
+Unit::Unit(unsigned int _id, unsigned int t)
+  : Object(_id,t)
+{
+	
+}
+
 Unit::~Unit()
 {
     
@@ -39,4 +45,14 @@ double Unit::getSpd() const
 void Unit::setSpd(double s)
 {
 	spd = s;
+}
+
+vec2 Unit::getIntension() const
+{
+	return intension;
+}
+
+void Unit::setIntension(const vec2 &v)
+{
+	intension = v;
 }

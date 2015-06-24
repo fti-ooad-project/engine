@@ -78,6 +78,7 @@ private:
 	
 public:
 	Division();
+	Division(unsigned int _id);
 	virtual ~Division();
 	
 	void addUnit(Unit *u);
@@ -86,8 +87,8 @@ public:
 	iterator begin();
 	iterator end();
 	
-	const_iterator cbegin() const;
-	const_iterator cend() const;
+	const_iterator begin() const;
+	const_iterator end() const;
 	
 	unsigned int getID() const;
 	int getNumber() const;

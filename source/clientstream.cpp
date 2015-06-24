@@ -36,10 +36,48 @@ void ClientStream::operator()(TCPConnection *conn)
 		printf("data was received from %d\n",conn->get_fd());
 		try
 		{
-			int size = 0;
-			conn->queue_read(size);
-			flush();
-			for(int i = 0; i < size; ++i)
+			while(true)
+			{
+				DivisionID did;
+				conn->queue_read(did);
+				flush();
+				if(did == 0)
+					break;
+				Division *d = storage->getDivision(did);
+				if(d == nullptr)
+				{
+					d = new Division(did);
+					storage->addDivision(d);
+				}
+				while(true)
+				{
+					UnitID id;
+					UnitType type;
+					vec2 dir;
+					vec2 dst;
+					conn->queue_read(id);
+					flush();
+					if(id == 0)
+						break;
+					conn->queue_read(type);
+					flush();
+					Unit *u = storage->getUnit(id);
+					if(u == nullptr)
+					{
+						u = new Unit(id,type);
+						storage->addUnit(u);
+						storage->addObject(u);
+						d->addUnit(u);
+					}
+					conn->queue_read(dir);
+					conn->queue_read(dst);
+					flush();
+					u->setDir(dir);
+					u->setDst(dst);
+				}
+			}
+			
+			while(true)
 			{
 				ObjectID id;
 				ObjectType type;
@@ -48,11 +86,10 @@ void ClientStream::operator()(TCPConnection *conn)
 				vec2 pos;
 				vec2 vel;
 				conn->queue_read(id);
+				flush();
+				if(id == 0)
+					break;
 				conn->queue_read(type);
-				conn->queue_read(size);
-				conn->queue_read(inv_mass);
-				conn->queue_read(pos);
-				conn->queue_read(vel);
 				flush();
 				Object *o = storage->getObject(id);
 				if(o == nullptr)
@@ -60,10 +97,16 @@ void ClientStream::operator()(TCPConnection *conn)
 					o = new Object(id,type);
 					storage->addObject(o);
 				}
+				conn->queue_read(size);
+				conn->queue_read(inv_mass);
+				conn->queue_read(pos);
+				conn->queue_read(vel);
+				flush();
 				o->setSize(size);
 				o->setInvMass(inv_mass);
 				o->setPos(pos);
 				o->setVel(vel);
+				o->setVelBuf(vel);
 			}
 		}
 		catch(std::exception)

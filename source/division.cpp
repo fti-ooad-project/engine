@@ -83,6 +83,12 @@ Division::Division()
 	
 }
 
+Division::Division(unsigned int _id)
+  : id(_id)
+{
+	++id_count;
+}
+
 Division::~Division()
 {
 	
@@ -117,12 +123,12 @@ Division::iterator Division::end()
 	return iterator(members.end());
 }
 
-Division::const_iterator Division::cbegin() const
+Division::const_iterator Division::begin() const
 {
 	return const_iterator(members.cbegin());
 }
 
-Division::const_iterator Division::cend() const
+Division::const_iterator Division::end() const
 {
 	return const_iterator(members.cend());
 }
